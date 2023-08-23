@@ -4,8 +4,8 @@ const http = require('http');
 const port = 3000;
 
 // Client-specific parameters
-const clientId = '1000.5S0IVGQFNXWY9FEVIX0PY8OFF1EYCT';
-const clientSecret = 'ebbad8b4b039ecd73595c0077b04acf94004e813a8';
+const clientId = 'clientId';
+const clientSecret = 'clientSecret';
 const redirectUri = 'http://localhost:3000/callback';
 
 // Step 1: Code Retrieval
