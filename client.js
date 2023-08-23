@@ -10,10 +10,11 @@ const redirectUri = 'http://localhost:3000/callback';
 
 // Step 1: Code Retrieval
 async function retrieveCode() {
-    const codeUrl = `https://accounts.zoho.com/oauth/v2/auth?scope=ZohoCampaigns.campaign.ALL/request_code?client_id=${clientId}&client_secret=${clientSecret}&response_type=code&access_type=offline&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    const codeUrl = `https://accounts.zoho.com/oauth/v2/auth?scope=ZohoCampaigns.campaign.ALL&client_id=${clientId}&response_type=code&access_type=offline&redirect_uri=${redirectUri}`;
     const response = await axios.get(codeUrl);
     const redirectedUrl = response.request.res.responseUrl;
-    const code = redirectedUrl.split('?code=')[1];
+    // const { code } = redirectedUrl.query;
+    const code = redirectedUrl.split('?code=')[1].split(location)[0];
     return code;
 }
 
@@ -37,18 +38,9 @@ async function getAccessTokens(code) {
 // Step 3: Refreshing Access Tokens
 async function refreshAccessToken(refreshToken) {
     const refreshUrl = `https://accounts.zoho.in/oauth/v2/token?refresh_token=${refreshToken}&client_id=${client_id}&client_secret=${client_secret}&grant_type=refresh_token`;
-    // const data = {
-    //     grant_type: authorization_code,
-    //     client_id: clientId,
-    //     client_secret: clientSecret,
-    //     redirected_uri: redirectUri,
-    //     code: code,
-    //     refresh_token: refreshToken
-    // };
     const response = await axios.post(refreshUrl, data);
     const newAccessTokenInfo = response.data;
     const newAccessToken = newAccessTokenInfo.access_token;
-    // const newRefreshToken = newAccessTokenInfo.refresh_token;
     return newAccessToken;
 }
 
@@ -73,7 +65,7 @@ const server = http.createServer(async(req,res)=>{
             // Step 2: Access Token Retrieval
             const { accessToken, refreshToken } = await getAccessTokens(code);
 
-            // Step 4: Refreshing Access Tokens (if needed)
+            // Step 3: Refreshing Access Token
             const { newAccessToken } = await refreshAccessToken(refreshToken);
             
             // Step 3: Data Access Using Access Token
