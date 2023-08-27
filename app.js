@@ -42,7 +42,7 @@ app.get('/callback', async (req, res) => {
 
     const reqBody = {
         grant_type: 'authorization_code',
-        code,
+        code: code,
         client_id: process.env.CLIENT_ID,
         client_secret: process.env.CLIENT_SECRET,
         redirect_uri: process.env.REDIRECT_URI
