@@ -63,7 +63,7 @@ app.get('/callback', async (req, res) => {
 
         res.redirect('/user');
     } catch(err) {
-        // console.log(error);
+        console.log(error);
         res.status(500).send('Error retriving access token');
     }
 });
